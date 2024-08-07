@@ -8,8 +8,8 @@ import os
 class Place(BaseModel, Base):
     """ A place to stay """
 
+    __tablename__ = 'places'
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        __tablename__ = 'places'
         name = Column(String(128), nullable=False)
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
     

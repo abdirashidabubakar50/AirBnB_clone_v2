@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 from models.city import City
 from models.state import State
+import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
+from models.base_model import BaseModel, Base
 
 class DBStorage:
     __engine = None
@@ -14,6 +18,7 @@ class DBStorage:
         HBNB_MYSQL_DB = os.getenv('HBNB_MYSQL_DB')
         HBNB_ENV = os.getenv('HBNB_ENV')
 
+        print(f"HBNB_MYSQL_USER={HBNB_MYSQL_USER}")
         self.__engine = create_engine(f"mysql+mysqldb://{HBNB_MYSQL_USER}:{HBNB_MYSQL_PWD}@{HBNB_MYSQL_HOST}/{HBNB_MYSQL_DB}",
         pool_pre_ping = True)
 
