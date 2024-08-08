@@ -56,17 +56,12 @@ class BaseModel:
 
     def to_dict(self):
         """Return a dictionary representation of the instance."""
-        dict_rep = {}
-        for key, value in self.__dict__.items():
-            if key.startswith('_'):
-                continue
-            if isinstance(value, datetime):
-                dict_rep[key] = value.isoformat()
-            else:
-                dict_rep[key] = value
-
-        # Remove the _sa_instance_state key if it exists
+        dict_rep = self.__dict__.copy()
+        dict_rep['__class__'] = self.__class__.__name__
+        dict_rep['created_at'] = self.created_at.isoformat()
+        dict_rep['updated_at'] = self.updated_at.isoformat()
         if '_sa_instance_state' in dict_rep:
+            # Remove the _sa_instance_state key if it exists
             del dict_rep['_sa_instance_state']
 
         return dict_rep
