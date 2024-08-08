@@ -17,4 +17,5 @@ class Amenity(BaseModel, Base):
         viewonly=False,
         back_populates="amenities"
     )
-    name = ""
+    else:
+        name = ""
