@@ -21,7 +21,7 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-        
+
         else:
             if 'id' not in kwargs:
                 self.id = str(uuid.uuid4())
@@ -46,7 +46,7 @@ class BaseModel:
         """Deletes the current instance from storage"""
         from models import storage
         storage.delete(self)
-        
+
     def save(self):
         """Updates updated_at with current time when instance is changed"""
         from models import storage
@@ -55,14 +55,18 @@ class BaseModel:
         storage.save()
 
     def to_dict(self):
-        """Convert instance into dict format"""
-        dictionary = {}
+        """Return a dictionary representation of the instance."""
+        dict_rep = {}
         for key, value in self.__dict__.items():
-            if key != '_sa_instance_state':
-                if isinstance(value, datetime):
-                    dictionary[key] = value.isoformat()
-                else:
-                    dictionary[key] = value
-        dictionary['__class__'] = self.__class__.__name__
+            if key.startswith('_'):
+                continue
+            if isinstance(value, datetime):
+                dict_rep[key] = value.isoformat()
+            else:
+                dict_rep[key] = value
 
-        return dictionary
+        # Remove the _sa_instance_state key if it exists
+        if '_sa_instance_state' in dict_rep:
+            del dict_rep['_sa_instance_state']
+
+        return dict_rep
