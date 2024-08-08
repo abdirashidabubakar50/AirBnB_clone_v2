@@ -20,9 +20,14 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, nullable=False, default=0)
         latitude = Column(String(1024), nullable=True)
         longitude = Column(String(1024), nullable=True)
-
+        reviews = relationship('Review', backref='place', cascade='all, delete-orphan')
     
     else:
+        @property
+        def reviews(self):
+            from models.review import Review
+            from models import storage
+            return [review for review in storage.all(Review).values() if review.place_id == self.id]
         city_id = ""
         user_id = ""
         name = ""
