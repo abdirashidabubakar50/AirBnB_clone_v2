@@ -2,15 +2,14 @@
 # sets up the webserver for the deployment of  web_static
 
 # install nginx if not already installed
-if ! nginx -v &> /dev/null
-then
-    sudo apt-get update -y
-    sudo apt-get instal nginx -y
+if ! dpkg -l | grep -qw nginx; then
+    sudo apt update > /dev/null 2>&1
+    sudo apt install -y nginx > /dev/null 2>&1
 fi
 
 # create required directories of they don't already exist
-sudo mkdir -p /data/web_static/releases/test/
-sudo mkdir -p /data/web_static/shared/
+sudo mkdir -p /data/web_static/releases/test/ > /dev/null 2>&1
+sudo mkdir -p /data/web_static/shared/ > /dev/null 2>&1
 
 # create a fake html file to test Nginx configuration
 sudo tee /data/web_static/releases/test/index.html > /dev/null <<EOF
@@ -22,24 +21,23 @@ Holberton School
 </html>
 EOF
 # create symbolic link to test the folder
-if [ -L /data/web_static/current ]
-then
-    sudo rm -f /data/web_static/current
+if [ -L /data/web_static/current ]; then
+    sudo rm /data/web_static/current > /dev/null 2>&1
 fi
-sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+sudo ln -s /data/web_static/releases/test/ /data/web_static/current > /dev/null 2>&1
 
 # give ownership of the /data/ folder to the ubuntu user and group
-sudo chown -R ubuntu:ubuntu /data/
+sudo chown -R ubuntu:ubuntu /data/ > /dev/null 2>&1
 
 # update the nginx configuration to serve the content
-nginx_conf="/etc/nginx/sites-available/default"
-if ! grep -q "location /hbnb_static/" $nginx_conf
-then
-    sudo sed -i '/server_name_;/a \ \tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}' $nginx_conf
+NGINX_CONF="/etc/nginx/sites-available/default"
+if [ -f "$NGINX_CONF" ]; then
+    sudo sed -i '/location \/ {/,/}/d' $NGINX_CONF > /dev/null 2>&1
+    sudo sed -i '/server_name _;/a location /hbnb_static/ {\n    alias /data/web_static/current/;\n    index index.html;\n}' $NGINX_CONF > /dev/null 2>&1
+    sudo systemctl restart nginx > /dev/null 2>&1
+else
+    exit 1
 fi
-
-# Restart nginx to apply the changes
-sudo service nginx restart
 
 # ensure the script executes successfully
 exit 0
