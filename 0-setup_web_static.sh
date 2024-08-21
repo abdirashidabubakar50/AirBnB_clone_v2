@@ -13,15 +13,14 @@ sudo mkdir -p /data/web_static/releases/test/
 sudo mkdir -p /data/web_static/shared/
 
 # create a fake html file to test Nginx configuration
-# create a fake html file to test Nginx configuration
-echo "<html>
-  <head>
-  </head>
-  <body>
-    Holberton School
-  </body>
-</html>" | sudo tee /data/web_static/releases/test/index.html
-
+sudo tee /data/web_static/releases/test/index.html > /dev/null <<EOF
+<html>
+<head></head>
+<body>
+Holberton School
+</body>
+</html>
+EOF
 # create symbolic link to test the folder
 if [ -L /data/web_static/current ]
 then
