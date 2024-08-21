@@ -1,27 +1,26 @@
-from fabric import task
+from fabric.api import local
 from datetime import datetime
 import os
 
-@task
-def do_pack(c):
-    """Generates a .tgz archive from the contents of the web_static folder."""
-    # Create versions directory if it doesn't exist
-    if not os.path.exists('versions'):
-        os.makedirs('versions')
-
-    # Get the current time and format it
-    now = datetime.now()
-    date_str = now.strftime("%Y%m%d%H%M%S")
-
-    # Define the archive filename
-    archive_path = f'versions/web_static_{date_str}.tgz'
-
+def do_pack():
+    """Generates a .tgz archive from the contents of the web_static folder"""
+    
+    # Create the versions directory if it doesn't exist
+    if not os.path.exists("versions"):
+        os.makedirs("versions")
+    
+    # Create the archive filename with the current timestamp
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    archive_path = f"versions/web_static_{timestamp}.tgz"
+    
     # Create the .tgz archive
-    result = c.local(f'tar -cvzf {archive_path} web_static', hide=True)
+    result = local(f"tar -cvzf {archive_path} web_static", capture=True)
     
     # Check if the archive was created successfully
-    if result.ok:
-        print(f"Packing web_static to {archive_path}")
-        return archive_path
-    else:
+    if result.failed:
         return None
+    
+    print(f"Packing web_static to {archive_path}")
+    print(f"{result.stdout.strip()}")
+    return archive_path
+
