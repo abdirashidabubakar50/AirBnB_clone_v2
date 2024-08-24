@@ -9,11 +9,14 @@ then
 fi
 
 # create required directories of they don't already exist
+sudo mkdir -p /data/
+sudo mkdir p /data/web_static
+sudo mkdir -p /data/web_static/releases
+sudo mkdir -p /data/web_static/shared
 sudo mkdir -p /data/web_static/releases/test/
-sudo mkdir -p /data/web_static/shared/
-
+sudo touch /data/web_static/releases/test/index.html
 # create a fake html file to test Nginx configuration
-echo "<html>
+sudo echo "<html>
   <head>
   </head>
   <body>
@@ -29,7 +32,7 @@ sudo chown -R ubuntu:ubuntu /data/
 
 # update the nginx configuration to serve the content
 nginx_conf="/etc/nginx/sites-available/default"
-sudo sed -i '/server_name_;/a \ \n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' $nginx_conf
+sudo sed -i '/listen 80 default_server/a location /hbnb_static/ {alias /data/web_static/current/;}' $nginx_conf
 
 
 # Restart nginx to apply the changes
