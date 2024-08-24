@@ -10,10 +10,11 @@ app = Flask(__name__)
 def hello_hbnb():
     """
     This function will be executed when someone accesses the root URL ('/').
-    It returns the string "Hello HBNB!" to be displayed in the browser or the 
+    It returns the string "Hello HBNB!" to be displayed in the browser or the
     terminal.
     """
     return "Hello HBNB!"
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
