@@ -16,7 +16,7 @@ def teardown():
      Close the storage session after each request.
      This ensures that the database connection is properly closed.
      """
-    storage.close
+    storage.close()
 
 
 @app.route('/states_list/', strict_slashes=False)
