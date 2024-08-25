@@ -8,9 +8,7 @@ from models.state import State
 app = Flask(__name__)
 
 
-app.teardown_appcontext
-
-
+@app.teardown_appcontext
 def teardown(exception):
     """
      Close the storage session after each request.
