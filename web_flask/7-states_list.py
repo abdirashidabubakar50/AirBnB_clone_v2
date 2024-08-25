@@ -1,15 +1,21 @@
 #!/usr/bin/python3
+"""This module loads all the states instances from dbstorage and lists them"""
+
+
 from flask import Flask, render_template
 from models import storage
 from models.state import State
 app = Flask(__name__)
 
-"""This module loads all the states instances from dbstorage and lists them"""
 
 app.teardown_appcontext
 
 
 def teardown():
+    """
+     Close the storage session after each request.
+     This ensures that the database connection is properly closed.
+     """
     storage.close
 
 
