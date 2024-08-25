@@ -4,6 +4,7 @@ from models import storage
 from models.state import State
 app = Flask(__name__)
 
+"""This module loads all the states instances from dbstorage and lists them"""
 
 app.teardown_appcontext
 
